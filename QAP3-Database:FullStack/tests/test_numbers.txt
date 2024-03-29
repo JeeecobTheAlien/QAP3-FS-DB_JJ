@@ -1,0 +1,5 @@
+1. As a user, I can view a webpage listing all the Cars from the database.
+2. As a admin member, I can add a new Car to the inventory.
+3. As an admin, I can update the details of an existing Cars in the database.
+4. As a staff member, I can delete a Car from the inventory.
+5. As a user/admin, I can mark a Car as Completed from the inventory.

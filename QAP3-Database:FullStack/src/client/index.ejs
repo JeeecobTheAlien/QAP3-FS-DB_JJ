@@ -1,0 +1,305 @@
+<!-- src/client/views/index.ejs -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cars Inventory</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #f4f4f4;
+      color: #333;
+      margin: 20px;
+    }
+  
+    h1 {
+      color: #f44b42;
+    }
+  
+    form, ul {
+      margin-top: 20px;
+    }
+  
+    label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+    }
+  
+    input, button {
+      margin-bottom: 10px;
+      padding: 8px;
+      width: 200px;
+      box-sizing: border-box;
+    }
+  
+    button {
+      background-color: #cf473d;
+      color: #fff;
+      cursor: pointer;
+    }
+  
+    ul {
+      list-style: none;
+      padding: 0;
+    }
+  
+    li {
+      background-color: rgb(231, 218, 106);
+      border: 1px solid rgb(10, 0, 0);
+      margin-bottom: 10px;
+      padding: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+  
+    button[data-id] {
+      margin-left: 10px;
+    }
+  
+    li.completed {
+      text-decoration: line-through;
+    }
+  </style>
+  
+</head>
+<body>
+  <h1>Video Game Inventory</h1>
+
+  <!-- New form for adding cars -->
+  <form id="addCarForm">
+    <label for="make">Make:</label>
+    <input type="text" id="make" name="make" required>
+
+    <label for="trim">Platform:</label>
+    <input type="text" id="trim" name="trimm" required>
+
+    <button type="submit">Add Game</button>
+  </form>
+
+  <!-- Form for editing cars -->
+  <form id="editCarForm" style="display: none;">
+    <label for="newMake">New Make:</label>
+    <input type="text" id="newMake" name="newMake" required>
+
+    <label for="newTrims">New Trims:</label>
+    <input type="text" id="newTrims" name="newTrims" required>
+
+    <button type="button" onclick="submitEdit()">Save Changes</button>
+    <button type="button" onclick="cancelEdit()">Cancel</button>
+  </form>
+
+  <!-- List for displaying cars -->
+  <ul id="carList">
+    <!-- Rendered cars will go here -->
+  </ul>
+
+  <!-- Include this script in your HTML file -->
+  <script>
+    // Define editCar function
+    window.editCars = function (carId) {
+      const car = getCarsById(carId);
+  
+      // Check if the car is found
+      if (!car) {
+        console.error('Error editing car: Car not found');
+        return;
+      }
+  
+      const editForm = document.getElementById('editCarForm');
+      const newTitleInput = document.getElementById('newMake');
+      const newPlatformInput = document.getElementById('newTrims');
+  
+      // Reset the form inputs
+      newMakeInput.value = '';
+      newTrimInput.value = '';
+  
+      // Display the edit form
+      editForm.style.display = 'block';
+  
+      // Set up the form inputs with current values
+      newMakeInput.value = cars.make;
+      newTrimsInput.value = cars.trim;
+  
+      // Set the data-id attribute for the edit button
+      document.getElementById('editCarForm').dataset.carId = carId;
+    };
+  
+    // Add this script to fetch and display car and handle form submission
+    async function fetchCars() {
+      try {
+        const response = await fetch('/api/cars');
+        const cars = await response.json();
+  
+        // Clear the existing list
+        const carList = document.getElementById('carList');
+        carsList.innerHTML = '';
+  
+        // Populate the list with Cars
+        Cars.forEach(car => {
+          const listItem = document.createElement('li');
+          listItem.innerHTML = `
+            ${car.make} - ${car.trim}
+            <button type="button" data-id="${car.id}" onclick="editCar('${car.id}')">Edit</button>
+            <button onclick="deleteCar('${car.id}')">Delete</button>
+            <button onclick="completeCar('${car.id}')">Mark as Completed</button>
+          `;
+          carList.appendChild(listItem);
+        });
+      } catch (error) {
+        console.error('Error fetching Cars:', error);
+      }
+    }
+  
+    // Handle form submission
+document.getElementById('addCarForm').addEventListener('submit', async function (event) {
+  event.preventDefault();
+
+  const makeInput = document.getElementById('make');
+  const trimInput = document.getElementById('trimm');
+
+  const make = makeInput.value.trim();
+  const trim = trimInput.value.trim();
+
+  // Log the payload
+  console.log('Add Car Payload:', { make, trim });
+
+  try {
+    const response = await fetch('/api/cars', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ make, trim }),
+    });
+
+    // Rest of the code...
+  } catch (error) {
+    console.error('Error adding car:', error.message);
+  }
+});
+
+
+  
+    // Function to submit the edited car
+    window.submitEdit = async function () {
+      const carId = document.getElementById('editCarForm').dataset.carId;
+      const newMakeInput = document.getElementById('newMake');
+      const newTrimInput = document.getElementById('newTrim');
+  
+      const newMake = newMakeInput.value.trim();
+      const newTrim = newTrimInput.value.trim();
+  
+      // Ensure that newMake and newTrim are not empty
+      if (!newMake || !newTrim) {
+        console.error('Error editing car: Make and Trim cannot be empty');
+        return;
+      }
+  
+      try {
+        const response = await fetch(`/api/cars/${carId}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ id: parseInt(carId), make: newMake, trim: newTrim }),
+        });
+  
+        // Log the response
+        console.log('Edit Response:', await response.json());
+  
+        if (!response.ok) {
+          throw new Error(`Failed to update car: ${response.statusText}`);
+        }
+  
+        // Hide the edit form after successful submission
+        document.getElementById('editCarForm').style.display = 'none';
+  
+        // Fetch and display cars after editing a car
+        await fetchCars();
+      } catch (error) {
+        console.error('Error editing car:', error.message);
+      }
+    };
+  
+    // Function to cancel the edit operation
+    window.cancelEdit = function () {
+      document.getElementById('editCarForm').style.display = 'none';
+    };
+  
+    // Function to handle deleting a car
+    window.deleteCar = async function (carId) {
+      const confirmDelete = confirm('Are you sure you want to delete this car?');
+      if (!confirmDelete) return;
+  
+      try {
+        const response = await fetch(`/api/cars/${carId}`, {
+          method: 'DELETE',
+        });
+  
+        // Fetch and display cars after deleting a car
+        await fetchCars();
+      } catch (error) {
+        console.error('Error deleting car:', error);
+      }
+    };
+  
+    // Add this code inside the script tag in your HTML file
+// Function to handle marking a car as completed
+window.completeCar = async function (carId) {
+  try {
+    const response = await fetch(`/api/cars/${carId}/complete`, {
+      method: 'PATCH', // Use PATCH method to update completion status
+    });
+
+    if (!response.ok) {
+      throw new Error(`Failed to mark car as completed: ${response.statusText}`);
+    }
+
+    console.log(`Car with ID ${carId} marked as completed.`);
+
+    // Update the UI to reflect the completion status
+    const completedButton = document.querySelector(`button[data-id="${carId}"][onclick^="completeCar"]`);
+    
+    if (completedButton) {
+      const listItem = completedButton.closest('li');
+      if (listItem) {
+        listItem.style.textDecoration = 'line-through'; // Add strikethrough style to the list item
+      } else {
+        console.error('Error updating UI: List item not found.');
+      }
+    } else {
+      console.error('Error updating UI: Completed button not found.');
+    }
+  } catch (error) {
+    console.error('Error marking car as completed:', error);
+  }
+};
+
+
+
+
+
+  
+    // Helper function to get the car details by ID
+    function getCarById(carId) {
+      const carList = document.getElementById('carList');
+      const cars = Array.from(carList.children).map(item => {
+        const [make, trim] = item.textContent.split('-').map(text => text.trim());
+        const id = item.querySelector('button').dataset.id; // Change this line to dataset.id
+        return { id, make, trim };
+      });
+  
+      return car.find(car => car.id === carId);
+    }
+  
+    // Call fetchGames when the page loads
+    window.onload = function () {
+      fetchCars();
+    };
+  </script>
+  
+</body>
+</html>

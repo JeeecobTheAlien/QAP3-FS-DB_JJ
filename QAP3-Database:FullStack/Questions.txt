@@ -1,0 +1,35 @@
+How many hours did it take you to complete this assessment? 
+(Please keep try to keep track of how many hours you have spent 
+working on each individual part of this assessment as best you can
+ -an estimation is fine; we just want a rough idea.)
+
+ It took 15 hours over the weekend and 5 hours throughout the week (this doesnt include break time)
+------------------------------------------------------------------------------------
+ What online resources you have used? 
+ (My lectures, YouTube, Stack overflow etc.)
+
+I used the Database lectures more then anything, quite terrible with the database side so I also used some GPT to trouble check a few things
+------------------------------------------------------------------------------------
+ Did you need to ask any of your friends in solving the problems. 
+ (If yes, please mention name of the friend. They must be amongst your class fellows.)
+
+ No I didnt ask anyone for help
+------------------------------------------------------------------------------------
+ Did you need to ask questions to any of your instructors? 
+ If so, how many questions did you ask (or how many help sessions did you require)?
+
+ No I didnt ask anyone for help 
+--------------------------------------------------------------------------------------
+ Rate (subjectively) the difficulty of each question from your own perspective, 
+ and whether you feel confident that you can solve a similar but different problem 
+ requiring some of the same techniques in the future now that you’ve completed this 
+ one.
+
+ 1-10 1 being easy 10 being hard, I'd say a 7. 
+ When I first started doing the project I had somewhat of an idea of how it look 
+ but after really getting into the Database side which isnt really my strong suit 
+ I was really screwed from initial thoughts but after some Linus class videos and 
+ provided materials and W3Schools it got a bit easier still not my favourite thing 
+ to work on but not difficult, I will say if I graduate and work in the field 
+ I would much rather prefer front end with JavaScript and Css as thats my strong 
+ suit not the Database side.

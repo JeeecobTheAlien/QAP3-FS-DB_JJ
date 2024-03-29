@@ -66,17 +66,17 @@
   
 </head>
 <body>
-  <h1>Video Game Inventory</h1>
+  <h1>Car Dealer Inventory</h1>
 
   <!-- New form for adding cars -->
   <form id="addCarForm">
     <label for="make">Make:</label>
     <input type="text" id="make" name="make" required>
 
-    <label for="trim">Platform:</label>
+    <label for="trim">Trim:</label>
     <input type="text" id="trim" name="trimm" required>
 
-    <button type="submit">Add Game</button>
+    <button type="submit">Add Car</button>
   </form>
 
   <!-- Form for editing cars -->
@@ -295,7 +295,7 @@ window.completeCar = async function (carId) {
       return car.find(car => car.id === carId);
     }
   
-    // Call fetchGames when the page loads
+    // Call fetchCars when the page loads
     window.onload = function () {
       fetchCars();
     };
